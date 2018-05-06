@@ -57,6 +57,7 @@ def _check_args(estimator: Any, X: pd.DataFrame, y: List[Any], n_iters: int) -> 
     if n_iters <= 0:
         raise ValueError('n_iters must be positive.')
 
+
 def _sample_data(X: pd.DataFrame, y: List[Any], n_sample: int, rng: random.RandomState) -> \
         Tuple[pd.DataFrame, List[Any]]:
     if n_sample <= 0:

@@ -20,11 +20,20 @@ class DropoutType(Enum):
 
 def variable_dropout_loss(estimator: Any, X: pd.DataFrame, y: Iterable[Any],
                           loss_function: Callable[[Iterable[Any], Iterable[Any]], float] = mean_squared_error,
-                          dropout_type: DropoutType = DropoutType.RAW, n_sample: int = 1000,
+                          dropout_type: DropoutType = DropoutType.RAW, n_sample: int = 1000, n_iters: int = 100,
                           random_state: Optional[Union[int, random.RandomState]] = None) -> pd.Series:
     y = list(y)
-    _check_args(estimator, X, y)
+    _check_args(estimator, X, y, n_iters)
     rng = check_random_state(random_state)
+    result = _single_variable_dropout(estimator, X, y, loss_function, dropout_type, n_sample, rng)
+    for _ in range(n_iters - 1):
+        result += _single_variable_dropout(estimator, X, y, loss_function, dropout_type, n_sample, rng)
+    return result / n_iters
+
+
+def _single_variable_dropout(estimator: Any, X: pd.DataFrame, y: List[Any],
+                          loss_function: Callable[[Iterable[Any], Iterable[Any]], float],
+                          dropout_type: DropoutType, n_sample: int, rng: random.RandomState) -> pd.Series:
     sampled_X, sampled_y = _sample_data(X, y, n_sample, rng)
     loss_0 = loss_function(sampled_y, estimator.predict(sampled_X))
     loss_full = loss_function(_shuffle(sampled_y, rng), estimator.predict(sampled_X))
@@ -39,14 +48,15 @@ def variable_dropout_loss(estimator: Any, X: pd.DataFrame, y: Iterable[Any],
     return pd.Series(data=values, index=['_baseline_', *keys, '_full_model_'])
 
 
-def _check_args(estimator: Any, X: pd.DataFrame, y: List[Any]) -> None:
+def _check_args(estimator: Any, X: pd.DataFrame, y: List[Any], n_iters: int) -> None:
     if not hasattr(estimator, 'predict'):
         raise ValueError('Estimator does not have a predict method.')
     if len(X.columns) == 0:
         raise ValueError('X does not have any columns.')
     if len(X) != len(y):
         raise ValueError('Length of X does not match length of y.')
-
+    if n_iters <= 0:
+        raise ValueError('n_iters must be positive.')
 
 def _sample_data(X: pd.DataFrame, y: List[Any], n_sample: int, rng: random.RandomState) -> \
         Tuple[pd.DataFrame, List[Any]]:

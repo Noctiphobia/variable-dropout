@@ -6,7 +6,6 @@ from enum import Enum
 from numpy import random
 from sklearn.metrics import mean_squared_error
 from sklearn.utils import check_random_state
-from sklearn.model_selection import cross_val_score, BaseCrossValidator
 
 
 class DropoutType(Enum):

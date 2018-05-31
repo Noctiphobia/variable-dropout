@@ -49,11 +49,11 @@ Results:
 importance
 ```
 
-_baseline_      1.01624
-linear          0.98859
-square          0.82997
-noise           0.81722
-_full_model_    0.81736
+- _baseline_      1.01624
+- linear          0.98859
+- square          0.82997
+- noise           0.81722
+- _full_model_    0.81736
 
 
 

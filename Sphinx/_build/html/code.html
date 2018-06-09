@@ -1,0 +1,145 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Code &#8212; Variable Dropout 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Usage" href="usermanual.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="code">
+<h1>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-variable_dropout.variable_dropout">
+<span id="variable-dropout-variable-dropout"></span><h3>variable_dropout.variable_dropout<a class="headerlink" href="#module-variable_dropout.variable_dropout" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="variable_dropout.variable_dropout.DropoutType">
+<em class="property">class </em><code class="descclassname">variable_dropout.variable_dropout.</code><code class="descname">DropoutType</code><a class="headerlink" href="#variable_dropout.variable_dropout.DropoutType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method of variable dropout loss representation. One of the following:
+RAW - raw value of variable dropout loss
+RATIO - ratio of loss of variable dropout to loss for unperturbed model
+DIFFERENCE - difference between variable dropout loss and unperturbed model loss</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="variable_dropout.variable_dropout.variable_dropout_loss">
+<code class="descclassname">variable_dropout.variable_dropout.</code><code class="descname">variable_dropout_loss</code><span class="sig-paren">(</span><em>estimator: Any, X: pandas.core.frame.DataFrame, y: Iterable[Any], loss_function: Callable[[Iterable[Any], Iterable[Any]], float] = &lt;function mean_squared_error&gt;, dropout_type: variable_dropout.variable_dropout.DropoutType = &lt;DropoutType.RAW: (&lt;function DropoutType.&lt;lambda&gt;&gt;,)&gt;, n_sample: int = 1000, n_iters: int = 100, random_state: Union[int, mtrand.RandomState, NoneType] = None</em><span class="sig-paren">)</span> &#x2192; pandas.core.series.Series<a class="headerlink" href="#variable_dropout.variable_dropout.variable_dropout_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines importance of variables in the model.
+Model trained on all variables is used to predict result variable for data
+with one variable randomly shuffled. The worse the result with a particular
+variable shuffled is, the more important the variable is.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>estimator</strong> – any fitted classification or regression model with predict method.</li>
+<li><strong>X</strong> – samples.</li>
+<li><strong>y</strong> – result variable for samples.</li>
+<li><strong>loss_function</strong> – a function taking vectors of real and predicted results. The better the prediction, the smaller the returned value.</li>
+<li><strong>dropout_type</strong> – method of loss representation. One of values specified in DropoutType enumeration.</li>
+<li><strong>n_sample</strong> – number of samples to predict for. Given number of samples is randomly chosen from X with replacement.</li>
+<li><strong>n_iters</strong> – number of iterations. Final result is mean of the results of iterations.</li>
+<li><strong>random_state</strong> – ensures deterministic results if run twice with the same value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">series of variable dropout loss sorted descending.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Code</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li><a class="reference internal" href="#module-variable_dropout.variable_dropout">variable_dropout.variable_dropout</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="usermanual.html" title="previous chapter">Usage</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/code.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, group.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/code.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

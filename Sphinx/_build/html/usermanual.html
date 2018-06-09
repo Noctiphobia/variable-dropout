@@ -1,0 +1,225 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Usage &#8212; Variable Dropout 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Code" href="code.html" />
+    <link rel="prev" title="Welcome to Variable Dropout’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>Package can be used to establish the features importance for any classifiaction or regression model.</p>
+<div class="section" id="method-description">
+<h2>Method description<a class="headerlink" href="#method-description" title="Permalink to this headline">¶</a></h2>
+<p>The functionality is based on the comparison of the loss function value for two models. The first model is the full one. In the second values for the one variable are shuffled.</p>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>python 3.6</li>
+<li>scikit-learn 0.19.1</li>
+<li>numpy 1.11.3</li>
+<li>pandas 0.22.0</li>
+<li>matplotlib 2.2.0</li>
+</ul>
+</div>
+<div class="section" id="basic-usage">
+<h2>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="load-dataset">
+<h3>Load dataset<a class="headerlink" href="#load-dataset" title="Permalink to this headline">¶</a></h3>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">import</span> <span class="nn">sklearn</span> <span class="k">as</span> <span class="nn">sk</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">Y</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="prepare-model">
+<h3>Prepare model<a class="headerlink" href="#prepare-model" title="Permalink to this headline">¶</a></h3>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
+<span class="n">model_lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="n">model_xgb</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="train-model">
+<h3>Train model<a class="headerlink" href="#train-model" title="Permalink to this headline">¶</a></h3>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
+<span class="n">model_lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
+<span class="n">model_xgb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-features-importance">
+<h3>Get features importance<a class="headerlink" href="#get-features-importance" title="Permalink to this headline">¶</a></h3>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">importance_rf</span> <span class="o">=</span> <span class="n">variable_dropout_loss</span><span class="p">(</span><span class="n">model_rf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<span class="n">importance_lr</span> <span class="o">=</span> <span class="n">variable_dropout_loss</span><span class="p">(</span><span class="n">model_lr</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<span class="n">importance_xgb</span> <span class="o">=</span> <span class="n">variable_dropout_loss</span><span class="p">(</span><span class="n">model_xgb</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="text-form-of-importance">
+<h3>Text form of importance<a class="headerlink" href="#text-form-of-importance" title="Permalink to this headline">¶</a></h3>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">importance_rf</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">_baseline_</span>      <span class="mf">0.84351</span>
+   <span class="mi">23</span>              <span class="mf">0.39114</span>
+   <span class="mi">22</span>              <span class="mf">0.39178</span>
+   <span class="mi">7</span>               <span class="mf">0.38291</span>
+   <span class="mi">13</span>              <span class="mf">0.38380</span>
+   <span class="mi">19</span>              <span class="mf">0.38221</span>
+   <span class="mi">21</span>              <span class="mf">0.38623</span>
+   <span class="mi">27</span>              <span class="mf">0.38392</span>
+   <span class="mi">12</span>              <span class="mf">0.38529</span>
+   <span class="mi">1</span>               <span class="mf">0.38391</span>
+   <span class="mi">2</span>               <span class="mf">0.38180</span>
+   <span class="mi">3</span>               <span class="mf">0.38081</span>
+   <span class="mi">6</span>               <span class="mf">0.38238</span>
+   <span class="mi">15</span>              <span class="mf">0.38013</span>
+   <span class="mi">10</span>              <span class="mf">0.38089</span>
+   <span class="mi">11</span>              <span class="mf">0.38109</span>
+   <span class="mi">14</span>              <span class="mf">0.38214</span>
+   <span class="mi">16</span>              <span class="mf">0.38150</span>
+   <span class="mi">18</span>              <span class="mf">0.38048</span>
+   <span class="mi">24</span>              <span class="mf">0.37999</span>
+   <span class="mi">25</span>              <span class="mf">0.38108</span>
+   <span class="mi">26</span>              <span class="mf">0.38002</span>
+   <span class="mi">0</span>               <span class="mf">0.38183</span>
+   <span class="mi">4</span>               <span class="mf">0.38032</span>
+   <span class="mi">5</span>               <span class="mf">0.38000</span>
+   <span class="mi">8</span>               <span class="mf">0.37943</span>
+   <span class="mi">9</span>               <span class="mf">0.37945</span>
+   <span class="mi">17</span>              <span class="mf">0.37945</span>
+   <span class="mi">20</span>              <span class="mf">0.38238</span>
+   <span class="mi">28</span>              <span class="mf">0.38014</span>
+   <span class="mi">29</span>              <span class="mf">0.37957</span>
+   <span class="n">_full_model_</span>    <span class="mf">0.37945</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="visual-form-of-importance">
+<h3>Visual form of importance<a class="headerlink" href="#visual-form-of-importance" title="Permalink to this headline">¶</a></h3>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot_variable_dropout_loss</span><span class="p">(</span><span class="n">importance_rf</span><span class="p">,</span> <span class="n">maxvars</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="figure" id="id1">
+<img alt="png" src="_images/pic1.png" />
+<p class="caption"><span class="caption-text">It is also possible to place more importance sets on the one chart.</span></p>
+</div>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot_variable_dropout_loss</span><span class="p">(</span><span class="n">importance_rf</span><span class="p">,</span> <span class="n">importance_lr</span><span class="p">,</span><span class="n">importance_xgb</span><span class="p">,</span> <span class="n">maxvars</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="png" src="_images/pic2.png" />
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#method-description">Method description</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#basic-usage">Basic usage</a><ul>
+<li><a class="reference internal" href="#load-dataset">Load dataset</a></li>
+<li><a class="reference internal" href="#prepare-model">Prepare model</a></li>
+<li><a class="reference internal" href="#train-model">Train model</a></li>
+<li><a class="reference internal" href="#get-features-importance">Get features importance</a></li>
+<li><a class="reference internal" href="#text-form-of-importance">Text form of importance</a></li>
+<li><a class="reference internal" href="#visual-form-of-importance">Visual form of importance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Variable Dropout’s documentation!</a></li>
+      <li>Next: <a href="code.html" title="next chapter">Code</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/usermanual.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, group.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/usermanual.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

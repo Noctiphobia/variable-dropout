@@ -6,7 +6,6 @@ from enum import Enum
 from numpy import random
 from sklearn.metrics import mean_squared_error
 from sklearn.utils import check_random_state
-import matplotlib.pyplot as plt
 
 
 class DropoutType(Enum):
@@ -98,70 +97,3 @@ def _sample_data(X: pd.DataFrame, y: List[Any], n_sample: int, rng: random.Rando
 
 def _shuffle(y: List[Any], rng: random.RandomState) -> List[Any]:
     return rng.choice(y, len(y), replace=False)
-	
-	
-
-def plot_variable_dropout_loss(*args : pd.Series, maxvars = 10, figsize = (8, 10)):
-       
-    indexes = ((list(args)[0])[0]).index
-
-    index_dictionary = {}
-
-    for ind in indexes:
-        tmp = [x[ind] for x in args[0]]
-        index_dictionary[ind] = (np.mean(tmp), np.max(tmp))
-        
-    sorted_indexes = sorted(index_dictionary.items(), key = lambda x: x[1], reverse = True) 
-    
-    if(maxvars != None):
-        sorted_indexes = sorted_indexes[0:maxvars]
-        
-    maxx = np.max([x[1][1] for x in sorted_indexes])
-    
-    maxx *= 1.05
-    
-    selected_indexes = [x[0] for x in sorted_indexes]
-    
-    plots_number = len(selected_indexes)
-    
-    counter = 0  
-    
-    fig = plt.figure(figsize=figsize)
-    fig.suptitle("drop-out loss", y=1.02, fontsize=12)
-    
-    for arg in args[0]:
-            
-        counter +=1       
-            
-        tmp = plt.subplot(plots_number, 1, counter)
-
-        tmp.set_xlim([0, maxx])
-        
-        labels = selected_indexes
-        
-        y_pos = np.arange(len(labels))
-        
-        values = arg[labels]  
-        
-        xerr = []
-        
-        for v in values:
-            xerr.append((v, 0))
-            
-        xerr = np.array(xerr).T  
-        
-        plt.barh(y_pos, values, [0]*len(labels), yerr=0.3, xerr = xerr, ecolor='grey')
-        
-        tmp.set_yticks(y_pos)
-        tmp.set_yticklabels(labels)
-		
-		title = 'model ' + str(counter)        
-        
-        tmp.set_title(title)
-
-        plt.gca().invert_yaxis()   
-
-            
-    plt.tight_layout()
-
-    plt.show()    

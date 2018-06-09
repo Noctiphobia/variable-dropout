@@ -39,15 +39,17 @@
 <dl class="class">
 <dt id="variable_dropout.variable_dropout.DropoutType">
 <em class="property">class </em><code class="descclassname">variable_dropout.variable_dropout.</code><code class="descname">DropoutType</code><a class="headerlink" href="#variable_dropout.variable_dropout.DropoutType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method of variable dropout loss representation. One of the following:
-RAW - raw value of variable dropout loss
+<dd><dl class="docutils">
+<dt>Method of variable dropout loss representation. One of the following:</dt>
+<dd>RAW - raw value of variable dropout loss
 RATIO - ratio of loss of variable dropout to loss for unperturbed model
-DIFFERENCE - difference between variable dropout loss and unperturbed model loss</p>
+DIFFERENCE - difference between variable dropout loss and unperturbed model loss</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
-<dt id="variable_dropout.variable_dropout.variable_dropout_loss">
-<code class="descclassname">variable_dropout.variable_dropout.</code><code class="descname">variable_dropout_loss</code><span class="sig-paren">(</span><em>estimator: Any, X: pandas.core.frame.DataFrame, y: Iterable[Any], loss_function: Callable[[Iterable[Any], Iterable[Any]], float] = &lt;function mean_squared_error&gt;, dropout_type: variable_dropout.variable_dropout.DropoutType = &lt;DropoutType.RAW: (&lt;function DropoutType.&lt;lambda&gt;&gt;,)&gt;, n_sample: int = 1000, n_iters: int = 100, random_state: Union[int, mtrand.RandomState, NoneType] = None</em><span class="sig-paren">)</span> &#x2192; pandas.core.series.Series<a class="headerlink" href="#variable_dropout.variable_dropout.variable_dropout_loss" title="Permalink to this definition">¶</a></dt>
+<dt id="variable_dropout.variable_dropout.variable_dropout">
+<code class="descclassname">variable_dropout.variable_dropout.</code><code class="descname">variable_dropout</code><span class="sig-paren">(</span><em>estimator: Any, X: pandas.core.frame.DataFrame, y: Iterable[Any], loss_function: Callable[[Iterable[Any], Iterable[Any]], float] = &lt;function mean_squared_error&gt;, dropout_type: variable_dropout.variable_dropout.DropoutType = &lt;DropoutType.RAW: (&lt;function DropoutType.&lt;lambda&gt;&gt;,)&gt;, n_sample: int = 1000, n_iters: int = 100, random_state: Union[int, mtrand.RandomState, NoneType] = None</em><span class="sig-paren">)</span> &#x2192; pandas.core.series.Series<a class="headerlink" href="#variable_dropout.variable_dropout.variable_dropout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines importance of variables in the model.
 Model trained on all variables is used to predict result variable for data
 with one variable randomly shuffled. The worse the result with a particular

@@ -66,9 +66,9 @@ Get features importance
 
 .. code:: python
 
-   importance_rf = variable_dropout_loss(model_rf, X, Y, loss_function=sk.metrics.hinge_loss, random_state=rng)
-   importance_lr = variable_dropout_loss(model_lr, X, Y, loss_function=sk.metrics.hinge_loss, random_state=rng)
-   importance_xgb = variable_dropout_loss(model_xgb, X, Y, loss_function=sk.metrics.hinge_loss, random_state=rng)
+   importance_rf = variable_dropout(model_rf, X, Y, loss_function=sk.metrics.hinge_loss, random_state=rng)
+   importance_lr = variable_dropout(model_lr, X, Y, loss_function=sk.metrics.hinge_loss, random_state=rng)
+   importance_xgb = variable_dropout(model_xgb, X, Y, loss_function=sk.metrics.hinge_loss, random_state=rng)
    
 
 
@@ -122,7 +122,7 @@ Visual form of importance
 
 .. code:: python
 
-   plot_variable_dropout_loss(importance_rf, maxvars = 10, figsize = (20, 20))
+   plot_variable_dropout(importance_rf, maxvars = 10, figsize = (20, 20))
 
 
 .. figure:: pic1.png
@@ -134,7 +134,7 @@ Visual form of importance
    
 .. code:: python
 
-   plot_variable_dropout_loss(importance_rf, importance_lr,importance_xgb, maxvars = 10, figsize = (20, 20))
+   plot_variable_dropout(importance_rf, importance_lr,importance_xgb, maxvars = 10, figsize = (20, 20))
    
 .. figure:: pic2.png
    :alt: png

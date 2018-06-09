@@ -11,9 +11,9 @@ from sklearn.utils import check_random_state
 class DropoutType(Enum):
     """
     Method of variable dropout loss representation. One of the following:
-    RAW - raw value of variable dropout loss
-    RATIO - ratio of loss of variable dropout to loss for unperturbed model
-    DIFFERENCE - difference between variable dropout loss and unperturbed model loss
+        RAW - raw value of variable dropout loss
+        RATIO - ratio of loss of variable dropout to loss for unperturbed model
+        DIFFERENCE - difference between variable dropout loss and unperturbed model loss
     """
     RAW = (lambda loss, loss_0: loss,)
     RATIO = (lambda loss, loss_0: loss / loss_0,)
@@ -23,10 +23,10 @@ class DropoutType(Enum):
         return self.value[0](*args, **kwargs)
 
 
-def variable_dropout_loss(estimator: Any, X: pd.DataFrame, y: Iterable[Any],
-                          loss_function: Callable[[Iterable[Any], Iterable[Any]], float] = mean_squared_error,
-                          dropout_type: DropoutType = DropoutType.RAW, n_sample: int = 1000, n_iters: int = 100,
-                          random_state: Optional[Union[int, random.RandomState]] = None) -> pd.Series:
+def variable_dropout(estimator: Any, X: pd.DataFrame, y: Iterable[Any],
+                     loss_function: Callable[[Iterable[Any], Iterable[Any]], float] = mean_squared_error,
+                     dropout_type: DropoutType = DropoutType.RAW, n_sample: int = 1000, n_iters: int = 100,
+                     random_state: Optional[Union[int, random.RandomState]] = None) -> pd.Series:
     """
     Determines importance of variables in the model.
     Model trained on all variables is used to predict result variable for data

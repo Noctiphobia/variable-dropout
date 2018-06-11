@@ -26,7 +26,7 @@ class DropoutType(Enum):
 def variable_dropout(estimator: Any, X: pd.DataFrame, y: Iterable[Any],
                      loss_function: Callable[[Iterable[Any], Iterable[Any]], float] = mean_squared_error,
                      dropout_type: DropoutType = DropoutType.RAW, n_sample: int = 1000, n_iters: int = 100,
-                     random_state: Optional[Union[int, random.RandomState]] = None) -> pd.Series:
+                     random_state: Optional[Union[int, random.RandomState]] = None, label = None) -> pd.DataFrame:
     """
     Determines importance of variables in the model.
     Model trained on all variables is used to predict result variable for data
@@ -55,7 +55,14 @@ def variable_dropout(estimator: Any, X: pd.DataFrame, y: Iterable[Any],
     result = _single_variable_dropout(estimator, X, y, loss_function, dropout_type, n_sample, rng)
     for _ in range(n_iters - 1):
         result += _single_variable_dropout(estimator, X, y, loss_function, dropout_type, n_sample, rng)
-    return result / n_iters
+    
+    if label == None:
+        label = (str(type(estimator))).split('.')[-1].replace('\'>', '')
+        
+    data = {'variable' : result.index, 'dropout_loss' : result.values / n_iters , 'label' : label}    
+    ret = pd.DataFrame(data, columns=data.keys())    
+       
+    return ret
 
 
 def _single_variable_dropout(estimator: Any, X: pd.DataFrame, y: List[Any],
@@ -97,3 +104,4 @@ def _sample_data(X: pd.DataFrame, y: List[Any], n_sample: int, rng: random.Rando
 
 def _shuffle(y: List[Any], rng: random.RandomState) -> List[Any]:
     return rng.choice(y, len(y), replace=False)
+

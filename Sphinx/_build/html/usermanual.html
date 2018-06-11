@@ -33,10 +33,10 @@
             
   <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
-<p>Package can be used to establish the features importance for any classifiaction or regression model.</p>
+<p>Package can be used to establish the features importance for any classifiaction or regression model. You can present the result in text and graphical form. Additonally, you can present a few plots on the one graphics.</p>
 <div class="section" id="method-description">
 <h2>Method description<a class="headerlink" href="#method-description" title="Permalink to this headline">¶</a></h2>
-<p>The functionality is based on the comparison of the loss function value for two models. The first model is the full one. In the second values for the one variable are shuffled.</p>
+<p>The functionality is based on the comparison of the loss function value for two models. The first model is the full one. In the second, values for the one variable are shuffled. In order to minimize the influence of randomness, the number of algorithm iteration was added. The final result is obtained as the mean of the results from the all iterations.</p>
 </div>
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
@@ -52,6 +52,7 @@
 <h2>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="load-dataset">
 <h3>Load dataset<a class="headerlink" href="#load-dataset" title="Permalink to this headline">¶</a></h3>
+<p>First you need to import necessary packages.</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
@@ -59,17 +60,20 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
+<p>Initialize a random generator and import a dataset.</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-<span class="n">Y</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+<p>Get an input dataset and output values.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="prepare-model">
 <h3>Prepare model<a class="headerlink" href="#prepare-model" title="Permalink to this headline">¶</a></h3>
+<p>Create a classification or a regression model.</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
 <span class="n">model_lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
 <span class="n">model_xgb</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">()</span>
@@ -78,17 +82,18 @@
 </div>
 <div class="section" id="train-model">
 <h3>Train model<a class="headerlink" href="#train-model" title="Permalink to this headline">¶</a></h3>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
-<span class="n">model_lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
-<span class="n">model_xgb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
+<p>Train model on your data.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="p">)</span>
+<span class="n">model_lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="p">)</span>
+<span class="n">model_xgb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-features-importance">
 <h3>Get features importance<a class="headerlink" href="#get-features-importance" title="Permalink to this headline">¶</a></h3>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">importance_rf</span> <span class="o">=</span> <span class="n">variable_dropout</span><span class="p">(</span><span class="n">model_rf</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
-<span class="n">importance_lr</span> <span class="o">=</span> <span class="n">variable_dropout</span><span class="p">(</span><span class="n">model_lr</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
-<span class="n">importance_xgb</span> <span class="o">=</span> <span class="n">variable_dropout</span><span class="p">(</span><span class="n">model_xgb</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">importance_rf</span> <span class="o">=</span> <span class="n">variable_dropout</span><span class="p">(</span><span class="n">model_rf</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<span class="n">importance_lr</span> <span class="o">=</span> <span class="n">variable_dropout</span><span class="p">(</span><span class="n">model_lr</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<span class="n">importance_xgb</span> <span class="o">=</span> <span class="n">variable_dropout</span><span class="p">(</span><span class="n">model_xgb</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -97,51 +102,52 @@
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">importance_rf</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">_baseline_</span>      <span class="mf">0.84351</span>
-   <span class="mi">23</span>              <span class="mf">0.39114</span>
-   <span class="mi">22</span>              <span class="mf">0.39178</span>
-   <span class="mi">7</span>               <span class="mf">0.38291</span>
-   <span class="mi">13</span>              <span class="mf">0.38380</span>
-   <span class="mi">19</span>              <span class="mf">0.38221</span>
-   <span class="mi">21</span>              <span class="mf">0.38623</span>
-   <span class="mi">27</span>              <span class="mf">0.38392</span>
-   <span class="mi">12</span>              <span class="mf">0.38529</span>
-   <span class="mi">1</span>               <span class="mf">0.38391</span>
-   <span class="mi">2</span>               <span class="mf">0.38180</span>
-   <span class="mi">3</span>               <span class="mf">0.38081</span>
-   <span class="mi">6</span>               <span class="mf">0.38238</span>
-   <span class="mi">15</span>              <span class="mf">0.38013</span>
-   <span class="mi">10</span>              <span class="mf">0.38089</span>
-   <span class="mi">11</span>              <span class="mf">0.38109</span>
-   <span class="mi">14</span>              <span class="mf">0.38214</span>
-   <span class="mi">16</span>              <span class="mf">0.38150</span>
-   <span class="mi">18</span>              <span class="mf">0.38048</span>
-   <span class="mi">24</span>              <span class="mf">0.37999</span>
-   <span class="mi">25</span>              <span class="mf">0.38108</span>
-   <span class="mi">26</span>              <span class="mf">0.38002</span>
-   <span class="mi">0</span>               <span class="mf">0.38183</span>
-   <span class="mi">4</span>               <span class="mf">0.38032</span>
-   <span class="mi">5</span>               <span class="mf">0.38000</span>
-   <span class="mi">8</span>               <span class="mf">0.37943</span>
-   <span class="mi">9</span>               <span class="mf">0.37945</span>
-   <span class="mi">17</span>              <span class="mf">0.37945</span>
-   <span class="mi">20</span>              <span class="mf">0.38238</span>
-   <span class="mi">28</span>              <span class="mf">0.38014</span>
-   <span class="mi">29</span>              <span class="mf">0.37957</span>
-   <span class="n">_full_model_</span>    <span class="mf">0.37945</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>                <span class="n">_baseline_</span>       <span class="mf">0.84005</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">1</span>                <span class="n">worst</span> <span class="n">area</span>       <span class="mf">0.44505</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">2</span>           <span class="n">worst</span> <span class="n">perimeter</span>       <span class="mf">0.40254</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">3</span>          <span class="n">worst</span> <span class="n">smoothness</span>       <span class="mf">0.37953</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">4</span>            <span class="n">mean</span> <span class="n">concavity</span>       <span class="mf">0.37759</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">5</span>       <span class="n">mean</span> <span class="n">concave</span> <span class="n">points</span>       <span class="mf">0.38145</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">6</span>             <span class="n">worst</span> <span class="n">texture</span>       <span class="mf">0.37810</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">7</span>          <span class="n">mean</span> <span class="n">compactness</span>       <span class="mf">0.37568</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">8</span>              <span class="n">mean</span> <span class="n">texture</span>       <span class="mf">0.37818</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">9</span>              <span class="n">radius</span> <span class="n">error</span>       <span class="mf">0.37554</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">10</span>     <span class="n">worst</span> <span class="n">concave</span> <span class="n">points</span>       <span class="mf">0.37553</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">11</span>              <span class="n">mean</span> <span class="n">radius</span>       <span class="mf">0.37478</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">12</span>           <span class="n">mean</span> <span class="n">perimeter</span>       <span class="mf">0.37550</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">13</span>         <span class="n">smoothness</span> <span class="n">error</span>       <span class="mf">0.37595</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">14</span>          <span class="n">worst</span> <span class="n">concavity</span>       <span class="mf">0.37503</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">15</span>                <span class="n">mean</span> <span class="n">area</span>       <span class="mf">0.37523</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">16</span>          <span class="n">mean</span> <span class="n">smoothness</span>       <span class="mf">0.37425</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">17</span>            <span class="n">mean</span> <span class="n">symmetry</span>       <span class="mf">0.37425</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">18</span>   <span class="n">mean</span> <span class="n">fractal</span> <span class="n">dimension</span>       <span class="mf">0.37425</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">19</span>            <span class="n">texture</span> <span class="n">error</span>       <span class="mf">0.37479</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">20</span>          <span class="n">perimeter</span> <span class="n">error</span>       <span class="mf">0.37425</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">21</span>               <span class="n">area</span> <span class="n">error</span>       <span class="mf">0.37512</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">22</span>        <span class="n">compactness</span> <span class="n">error</span>       <span class="mf">0.37574</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">23</span>          <span class="n">concavity</span> <span class="n">error</span>       <span class="mf">0.37425</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">24</span>     <span class="n">concave</span> <span class="n">points</span> <span class="n">error</span>       <span class="mf">0.37425</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">25</span>           <span class="n">symmetry</span> <span class="n">error</span>       <span class="mf">0.37425</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">26</span>  <span class="n">fractal</span> <span class="n">dimension</span> <span class="n">error</span>       <span class="mf">0.37510</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">27</span>        <span class="n">worst</span> <span class="n">compactness</span>       <span class="mf">0.37439</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">28</span>           <span class="n">worst</span> <span class="n">symmetry</span>       <span class="mf">0.37464</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">29</span>  <span class="n">worst</span> <span class="n">fractal</span> <span class="n">dimension</span>       <span class="mf">0.37431</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">30</span>             <span class="n">worst</span> <span class="n">radius</span>       <span class="mf">0.37306</span>  <span class="n">RandomForestClassifier</span>
+<span class="mi">31</span>             <span class="n">_full_model_</span>       <span class="mf">0.37425</span>  <span class="n">RandomForestClassifier</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="visual-form-of-importance">
 <h3>Visual form of importance<a class="headerlink" href="#visual-form-of-importance" title="Permalink to this headline">¶</a></h3>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot_variable_dropout</span><span class="p">(</span><span class="n">importance_rf</span><span class="p">,</span> <span class="n">maxvars</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<p>You can graphically present the results.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot_variable_dropout</span><span class="p">(</span><span class="n">importance_rf</span><span class="p">,</span> <span class="n">maxvars</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="figure" id="id1">
 <img alt="png" src="_images/pic1.png" />
 <p class="caption"><span class="caption-text">It is also possible to place more importance sets on the one chart.</span></p>
 </div>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot_variable_dropout</span><span class="p">(</span><span class="n">importance_rf</span><span class="p">,</span> <span class="n">importance_lr</span><span class="p">,</span><span class="n">importance_xgb</span><span class="p">,</span> <span class="n">maxvars</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot_variable_dropout</span><span class="p">(</span><span class="n">importance_rf</span><span class="p">,</span> <span class="n">importance_lr</span><span class="p">,</span><span class="n">importance_xgb</span><span class="p">,</span> <span class="n">maxvars</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="figure">

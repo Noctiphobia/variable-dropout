@@ -3,14 +3,14 @@ import pandas as pd
 from typing import Optional
 
 
-def plot_variable_dropout(*args: pd.Series, max_vars: Optional[int] = 10, include_baseline_and_full: bool = True) -> None:
+def plot_variable_dropout(max_vars: Optional[int] = 10, include_baseline_and_full: bool = True, **kwargs: pd.Series) -> None:
     fig = plt.figure()
     fig.suptitle('Dropout loss', y=1.0)
-    max_x = max(max(importance) for importance in args) * 1.1
-    for counter, arg in enumerate(args):
-        subplot = plt.subplot(len(args), 1, counter + 1)
+    max_x = max(max(importance) for importance in kwargs.values()) * 1.1
+    for counter, (model_name, arg) in enumerate(kwargs.items()):
+        subplot = plt.subplot(len(kwargs), 1, counter + 1)
         subplot.set_xlim([0, max_x])
-        subplot.set_title(f'Model {counter+1}')
+        subplot.set_title(model_name)
         values = _get_data_to_plot(arg, max_vars, include_baseline_and_full)[::-1]
         ax = values.plot.barh(color='grey')
         for p in ax.patches:

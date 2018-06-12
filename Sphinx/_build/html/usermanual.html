@@ -52,27 +52,25 @@
 <h2>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="load-dataset">
 <h3>Load dataset<a class="headerlink" href="#load-dataset" title="Permalink to this headline">¶</a></h3>
-<p>First you need to import necessary packages.</p>
+<p>Import necessary packages.</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
 <span class="kn">import</span> <span class="nn">sklearn</span> <span class="k">as</span> <span class="nn">sk</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">xgboost</span> <span class="k">import</span> <span class="n">XGBClassifier</span>
 </pre></div>
 </div>
-<p>Initialize a random generator and import a dataset.</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Get an input dataset and output values.</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-<span class="n">target</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+<p>Import data, extract input dataset and a target vector.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">target</span>
+<span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">feature_names</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="prepare-model">
-<h3>Prepare model<a class="headerlink" href="#prepare-model" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="prepare-models">
+<h3>Prepare models<a class="headerlink" href="#prepare-models" title="Permalink to this headline">¶</a></h3>
 <p>Create a classification or a regression model.</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
 <span class="n">model_lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
@@ -80,9 +78,9 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="train-model">
-<h3>Train model<a class="headerlink" href="#train-model" title="Permalink to this headline">¶</a></h3>
-<p>Train model on your data.</p>
+<div class="section" id="train-models">
+<h3>Train models<a class="headerlink" href="#train-models" title="Permalink to this headline">¶</a></h3>
+<p>Train models on data.</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="p">)</span>
 <span class="n">model_lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="p">)</span>
 <span class="n">model_xgb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="p">)</span>
@@ -91,6 +89,7 @@
 </div>
 <div class="section" id="get-features-importance">
 <h3>Get features importance<a class="headerlink" href="#get-features-importance" title="Permalink to this headline">¶</a></h3>
+<p>Compute features importance for models.</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">importance_rf</span> <span class="o">=</span> <span class="n">variable_dropout</span><span class="p">(</span><span class="n">model_rf</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
 <span class="n">importance_lr</span> <span class="o">=</span> <span class="n">variable_dropout</span><span class="p">(</span><span class="n">model_lr</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
 <span class="n">importance_xgb</span> <span class="o">=</span> <span class="n">variable_dropout</span><span class="p">(</span><span class="n">model_xgb</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">loss_function</span><span class="o">=</span><span class="n">sk</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">hinge_loss</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
@@ -99,6 +98,7 @@
 </div>
 <div class="section" id="text-form-of-importance">
 <h3>Text form of importance<a class="headerlink" href="#text-form-of-importance" title="Permalink to this headline">¶</a></h3>
+<p>Display computed importance for a model.</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">importance_rf</span>
 </pre></div>
 </div>
@@ -139,14 +139,14 @@
 </div>
 <div class="section" id="visual-form-of-importance">
 <h3>Visual form of importance<a class="headerlink" href="#visual-form-of-importance" title="Permalink to this headline">¶</a></h3>
-<p>You can graphically present the results.</p>
+<p>Visualize importance for one model.</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot_variable_dropout</span><span class="p">(</span><span class="n">importance_rf</span><span class="p">,</span> <span class="n">maxvars</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="figure" id="id1">
+<div class="figure">
 <img alt="png" src="_images/pic1.png" />
-<p class="caption"><span class="caption-text">It is also possible to place more importance sets on the one chart.</span></p>
 </div>
+<p>Visualize importance for multiple models.</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plot_variable_dropout</span><span class="p">(</span><span class="n">importance_rf</span><span class="p">,</span> <span class="n">importance_lr</span><span class="p">,</span><span class="n">importance_xgb</span><span class="p">,</span> <span class="n">maxvars</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -170,8 +170,8 @@
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
 <li><a class="reference internal" href="#basic-usage">Basic usage</a><ul>
 <li><a class="reference internal" href="#load-dataset">Load dataset</a></li>
-<li><a class="reference internal" href="#prepare-model">Prepare model</a></li>
-<li><a class="reference internal" href="#train-model">Train model</a></li>
+<li><a class="reference internal" href="#prepare-models">Prepare models</a></li>
+<li><a class="reference internal" href="#train-models">Train models</a></li>
 <li><a class="reference internal" href="#get-features-importance">Get features importance</a></li>
 <li><a class="reference internal" href="#text-form-of-importance">Text form of importance</a></li>
 <li><a class="reference internal" href="#visual-form-of-importance">Visual form of importance</a></li>

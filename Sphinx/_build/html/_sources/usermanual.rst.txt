@@ -22,7 +22,7 @@ Basic usage
 Load dataset
 ~~~~~~~~~~~~
 
-First you need to import necessary packages.
+Import necessary packages.
 
 .. code:: python
 	
@@ -31,25 +31,23 @@ First you need to import necessary packages.
    from sklearn.linear_model import LogisticRegression
    import sklearn as sk
    import numpy as np
+   from xgboost import XGBClassifier
 	
-Initialize a random generator and import a dataset.
+
+Import data, extract input dataset and a target vector.
 	
 
 .. code:: python
 
-   rng = random.RandomState(0)
    dataset = datasets.load_breast_cancer()
-   
-Get an input dataset and output values.
-	
-.. code:: python
-	
    data = pd.DataFrame(dataset.data)
-   target = dataset['target']
+   target = dataset.target
+   data.columns = dataset.feature_names
+   
 
 
-Prepare model
-~~~~~~~~~~~~~
+Prepare models
+~~~~~~~~~~~~~~~
 
 Create a classification or a regression model.
 
@@ -59,10 +57,10 @@ Create a classification or a regression model.
    model_lr = LogisticRegression()
    model_xgb = XGBClassifier()
 
-Train model
-~~~~~~~~~~~
+Train models
+~~~~~~~~~~~~~
 
-Train model on your data.
+Train models on data.
 
 .. code:: python
 
@@ -74,6 +72,8 @@ Train model on your data.
 Get features importance
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+Compute features importance for models.
+
 .. code:: python
 
    importance_rf = variable_dropout(model_rf, data, target, loss_function=sk.metrics.hinge_loss, random_state=rng)
@@ -84,6 +84,8 @@ Get features importance
 
 Text form of importance
 ~~~~~~~~~~~~~~~~~~~~~~~~
+
+Display computed importance for a model.
 
 .. code:: python
 
@@ -131,7 +133,7 @@ Text form of importance
 Visual form of importance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can graphically present the results.
+Visualize importance for one model.
 
 .. code:: python
 
@@ -142,8 +144,9 @@ You can graphically present the results.
    :alt: png
 
    
-   It is also possible to place more importance sets on the one chart.
- 
+   
+Visualize importance for multiple models.
+
    
 .. code:: python
 

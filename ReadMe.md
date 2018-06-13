@@ -42,7 +42,7 @@ model.fit(X, y)
 ```
 Calculate importance:
 ```python
-importance = variable_dropout_loss(model, X, y, loss_function=hinge_loss, random_state=rng)
+importance = variable_dropout(model, X, y, loss_function=hinge_loss, random_state=rng)
 ```
 Results:
 ```python
@@ -165,7 +165,7 @@ Display computed importance for a model.
 Visualize importance for one model.
 
 ```python
-   plot_variable_dropout(importance_rf, maxvars = 10, figsize = (15, 40))
+   plot_variable_dropout(importance_rf)
 ```
 
 ![one-model](https://github.com/Noctiphobia/variable-dropout/blob/master/Sphinx/pic1.png)
@@ -174,7 +174,7 @@ Visualize importance for multiple models.
 
 ```python
 
-   plot_variable_dropout(importance_rf, importance_lr,importance_xgb, maxvars = 10, figsize = (20, 40))
+   plot_variable_dropout(importance_rf, importance_lr,importance_xgb)
 ```
 
 ![multi-models](https://github.com/Noctiphobia/variable-dropout/blob/master/Sphinx/pic2.png)

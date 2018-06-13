@@ -4,6 +4,12 @@ from typing import Optional
 
 
 def plot_variable_dropout(*args: pd.DataFrame, max_vars: Optional[int] = 10, include_baseline_and_full: bool = True) -> None:
+    """
+        Plots the results of variable_dropout.
+        :param args: any number of variable_dropout results.
+        :param max_vars: maximum number of variables to plot per classifier, or None to plot all of them.
+        :param include_baseline_and_full: whether to include _baseline_ and _full_model_ in the plot.
+        """
     fig = plt.figure()
     fig.suptitle('Dropout loss', y=1.0)
     max_x = max(max(float(x) for x in importance['dropout_loss']) for importance in args) * 1.15

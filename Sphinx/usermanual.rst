@@ -137,7 +137,7 @@ Visualize importance for one model.
 
 .. code:: python
 
-   plot_variable_dropout(importance_rf, maxvars = 10, figsize = (15, 40))
+   plot_variable_dropout(importance_rf)
 
 
 .. figure:: pic1.png
@@ -150,7 +150,7 @@ Visualize importance for multiple models.
    
 .. code:: python
 
-   plot_variable_dropout(importance_rf, importance_lr,importance_xgb, maxvars = 10, figsize = (20, 40))
+   plot_variable_dropout(importance_rf, importance_lr,importance_xgb)
    
 .. figure:: pic2.png
    :alt: png

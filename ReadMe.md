@@ -3,7 +3,15 @@
 Package provides an implementation of variable dropout method, which can be used to establish the importance of features for any classification or regression model. For full description, visit [the documentation](https://variable-dropout.readthedocs.io/en/latest/).
 
 # Method description
-The functionality is based on the comparison of the loss function value for two models. The first model is the full one. In the second values for the one variable are pythonuffled.
+The functionality is based on the comparison of the loss function value for two models. The first model is the full one. In the second values for the one variable are shuffled.
+
+# Installation
+```sh
+git clone https://github.com/Noctiphobia/variable-dropout/
+cd variable-dropout
+python setup.py install
+```
+If ```python``` resolves to Python 2, replace it with ```python3```.
 
 # Requirements
   - Python 3.6

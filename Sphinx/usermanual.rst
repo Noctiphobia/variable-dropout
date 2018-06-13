@@ -6,6 +6,16 @@ Method description
 ------------------
 The functionality is based on the comparison of the loss function value for two models. The first model is the full one. In the second, values for the one variable are shuffled. In order to minimize the influence of randomness, the number of algorithm iteration was added. The final result is obtained as the mean of the results from the all iterations.
 
+Installation
+------------
+
+.. code:: sh
+   git clone https://github.com/Noctiphobia/variable-dropout/
+   cd variable-dropout
+   python setup.py install
+
+If python resolves to Python 2, replace it with python3.
+
 Requirements
 ------------
 

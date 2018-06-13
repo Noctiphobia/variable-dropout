@@ -1,6 +1,6 @@
 # Variable dropout
 
-Package can be used to establipython the features importance for any classifiaction or regression model. For full description, visit [the documentation](https://variable-dropout.readthedocs.io/en/latest/).
+Package provides an implementation of variable dropout method, which can be used to establish the importance of features for any classification or regression model. For full description, visit [the documentation](https://variable-dropout.readthedocs.io/en/latest/).
 
 # Method description
 The functionality is based on the comparison of the loss function value for two models. The first model is the full one. In the second values for the one variable are pythonuffled.

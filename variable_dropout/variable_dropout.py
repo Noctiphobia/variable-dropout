@@ -32,6 +32,7 @@ def variable_dropout(estimator: Any, X: pd.DataFrame, y: Iterable[Any],
     Model trained on all variables is used to predict result variable for data
     with one variable randomly shuffled. The worse the result with a particular
     variable shuffled is, the more important the variable is.
+
     :param estimator: any fitted classification or regression model
                       with predict method.
     :param X: samples.

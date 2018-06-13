@@ -3,78 +3,31 @@ import pandas as pd
 from typing import Optional
 
 
-def plot_variable_dropout(*args : pd.Series, maxvars = 10, figsize = (8, 10)):
-           
-    
-    indexes = args[0]['variable']   
-    
-
-    index_dictionary = {}
-
-    for ind in indexes:
-        tmp = [(x[x['variable'] == ind]['dropout_loss']).values[0] for x in args]
-        index_dictionary[ind] = (np.mean(tmp), np.max(tmp))
-        
-
-        
-    sorted_indexes = sorted(index_dictionary.items(), key = lambda x: x[1], reverse = True) 
-    
-    if(maxvars != None):
-        sorted_indexes = sorted_indexes[0:maxvars]
-        
-    maxx = np.max([x[1][1] for x in sorted_indexes])
-    
-    maxx *= 1.05
-    
-    selected_indexes = [x[0] for x in sorted_indexes]
-    
-    plots_number = len(selected_indexes)
-    
-    counter = 0  
-    
-    fig = plt.figure(figsize=figsize)
-    fig.suptitle("drop-out loss", y=1.02, fontsize=12)
-    
-    for arg in args:
-            
-        counter +=1       
-            
-        tmp = plt.subplot(plots_number, 1, counter)
-
-        tmp.set_xlim([0, maxx])
-        
-        if(not '_full_model_' in selected_indexes):
-            selected_indexes += ['_full_model_']
-        
-        labels = selected_indexes 
-        
-        y_pos = np.arange(len(labels)) 
-        
-        values = arg[arg['variable'].isin(labels)]['dropout_loss']
-        
-        minx = np.min(values)
-        
-        n = len(labels)
-        
-        xerr = []
-        
-        for v in values:
-            xerr.append((0, v - minx))
-            
-        xerr = np.array(xerr).T  
-        
-        plt.barh(y_pos, [minx] * n, color = 'white', capsize = 10, xerr = xerr, ecolor='black')
-        
-        tmp.set_yticks(y_pos)
-        tmp.set_yticklabels(labels)
-        
-        title = arg['label'][0]        
-        
-        tmp.set_title(title)
-
-        plt.gca().invert_yaxis()   
-
-            
+def plot_variable_dropout(*args: pd.DataFrame, max_vars: Optional[int] = 10, include_baseline_and_full: bool = True) -> None:
+    fig = plt.figure()
+    fig.suptitle('Dropout loss', y=1.0)
+    max_x = max(max(float(x) for x in importance['dropout_loss']) for importance in args) * 1.15
+    for counter, arg in enumerate(args):
+        model_name = arg['label'][0]
+        arg = pd.Series([float(x) for x in arg['dropout_loss']], list(arg['variable']))
+        subplot = plt.subplot(len(args), 1, counter + 1)
+        subplot.set_xlim([0, max_x])
+        subplot.set_title(model_name)
+        values = _get_data_to_plot(arg, max_vars, include_baseline_and_full)[::-1]
+        full_model_loss = arg['_full_model_']
+        values_to_plot = values - full_model_loss
+        ax = values_to_plot.plot.barh(color='grey', edgecolor='black', left=full_model_loss)
+        for p in ax.patches:
+            ax.annotate(str(round(p.get_x() + p.get_width(), 2)),
+                        ((p.get_x() + p.get_width()) * 1.01, p.get_y() * 1.01))
     plt.tight_layout()
-
     plt.show()
+
+
+def _get_data_to_plot(importance: pd.Series, max_vars: Optional[int], include_baseline_and_full: bool) -> pd.Series:
+    if max_vars is None or max_vars > len(importance) - 2:
+        max_vars = len(importance) - 2
+    result = importance[1:(max_vars + 1)]
+    if include_baseline_and_full:
+        result = importance[:1].append([result, importance[-1:]])
+    return result

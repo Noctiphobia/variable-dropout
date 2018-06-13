@@ -10,7 +10,7 @@ setup(name='Variable dropout',
       packages=find_packages(exclude=['test_variable_dropout']),
       install_requires=[
           'numpy == 1.11.3',
-          'scikit - learn == 0.19.1',
+          'scikit-learn == 0.19.1',
           'pandas == 0.22.0',
           'matplotlib == 2.2.0',
           'sphinx_rtd_theme == 0.4.0',

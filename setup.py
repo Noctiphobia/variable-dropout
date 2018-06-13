@@ -14,4 +14,5 @@ setup(name='Variable dropout',
           'pandas == 0.22.0',
           'matplotlib == 2.2.0',
           'sphinx_rtd_theme == 0.4.0',
+          'scipy == 1.0.0'
       ])

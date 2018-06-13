@@ -11,8 +11,11 @@ from sklearn.utils import check_random_state
 class DropoutType(Enum):
     """
     Method of variable dropout loss representation. One of the following:
-        RAW - raw value of variable dropout loss
-        RATIO - ratio of loss of variable dropout to loss for unperturbed model
+
+        RAW - raw value of variable dropout loss,
+
+        RATIO - ratio of loss of variable dropout to loss for unperturbed model,
+
         DIFFERENCE - difference between variable dropout loss and unperturbed model loss
     """
     RAW = (lambda loss, loss_0: loss,)

@@ -1,9 +1,9 @@
 # Variable dropout
 
-Package can be used to establish the features importance for any classifiaction or regression model. For full description, visit [the documentation](https://variable-dropout.readthedocs.io/en/latest/).
+Package can be used to establipython the features importance for any classifiaction or regression model. For full description, visit [the documentation](https://variable-dropout.readthedocs.io/en/latest/).
 
 # Method description
-The functionality is based on the comparison of the loss function value for two models. The first model is the full one. In the second values for the one variable are shuffled.
+The functionality is based on the comparison of the loss function value for two models. The first model is the full one. In the second values for the one variable are pythonuffled.
 
 # Requirements
   - Python 3.6
@@ -26,7 +26,7 @@ The functionality is based on the comparison of the loss function value for two 
 
 # Basic usage
 Load dataset and output:
-```sh
+```python
 rng = random.RandomState(0)
 X = pd.DataFrame({'linear': rng.randint(-5, 5, 2000),
                   'square': rng.randint(-5, 5, 2000),
@@ -36,24 +36,24 @@ y = [(row.square**2 - 2*row.linear + 1 + 0.1 * rng.randn()) for row in X.itertup
 y = [val > np.mean(y) for val in y]
 ```
 Prepare model:
-```sh
+```python
 model = LogisticRegression(random_state=rng)
 model.fit(X, y)
 ```
 Calculate importance:
-```sh
+```python
 importance = variable_dropout_loss(model, X, y, loss_function=hinge_loss, random_state=rng)
 ```
 Results:
-```sh
+```python
 importance
-```
 
 - _baseline_      1.01624
 - linear          0.98859
 - square          0.82997
 - noise           0.81722
 - _full_model_    0.81736
+```
 
 Real data example
 -----------

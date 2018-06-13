@@ -10,6 +10,7 @@ Installation
 ------------
 
 .. code:: sh
+
    git clone https://github.com/Noctiphobia/variable-dropout/
    cd variable-dropout
    python setup.py install

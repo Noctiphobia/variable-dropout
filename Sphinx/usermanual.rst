@@ -42,7 +42,10 @@ Import necessary packages.
    from sklearn.linear_model import LogisticRegression
    import sklearn as sk
    import numpy as np
+   import pandas as pd
    from xgboost import XGBClassifier
+   from variable_dropout.variable_dropout import variable_dropout
+   from variable_dropout.plot_variable_dropout import plot_variable_dropout
 	
 
 Import data, extract input dataset and a target vector.
@@ -64,9 +67,9 @@ Create a classification or a regression model.
 
 .. code:: python
 
-   model_rf = RandomForestClassifier()
-   model_lr = LogisticRegression()
-   model_xgb = XGBClassifier()
+   model_rf = RandomForestClassifier(random_state=0)
+   model_lr = LogisticRegression(random_state=0)
+   model_xgb = XGBClassifier(random_state=0)
 
 Train models
 ~~~~~~~~~~~~~
@@ -87,9 +90,9 @@ Compute features importance for models.
 
 .. code:: python
 
-   importance_rf = variable_dropout(model_rf, data, target, loss_function=sk.metrics.hinge_loss, random_state=rng)
-   importance_lr = variable_dropout(model_lr, data, target, loss_function=sk.metrics.hinge_loss, random_state=rng)
-   importance_xgb = variable_dropout(model_xgb, data, target, loss_function=sk.metrics.hinge_loss, random_state=rng)
+   importance_rf = variable_dropout(model_rf, data, target, loss_function=sk.metrics.hinge_loss, random_state=0)
+   importance_lr = variable_dropout(model_lr, data, target, loss_function=sk.metrics.hinge_loss, random_state=0)
+   importance_xgb = variable_dropout(model_xgb, data, target, loss_function=sk.metrics.hinge_loss, random_state=0)
    
 
 
@@ -104,39 +107,40 @@ Display computed importance for a model.
 
 ::
 
+	                   variable  dropout_loss                   label
+	0                _baseline_       0.84016  RandomForestClassifier
+	1                area error       0.39089  RandomForestClassifier
+	2              worst radius       0.38959  RandomForestClassifier
+	3       mean concave points       0.38006  RandomForestClassifier
+	4              mean texture       0.38068  RandomForestClassifier
+	5             worst texture       0.37935  RandomForestClassifier
+	6      worst concave points       0.38272  RandomForestClassifier
+	7           worst concavity       0.37685  RandomForestClassifier
+	8           worst perimeter       0.37748  RandomForestClassifier
+	9            mean perimeter       0.37744  RandomForestClassifier
+	10           mean concavity       0.37591  RandomForestClassifier
+	11               worst area       0.37906  RandomForestClassifier
+	12         worst smoothness       0.37760  RandomForestClassifier
+	13          mean smoothness       0.37539  RandomForestClassifier
+	14              mean radius       0.37618  RandomForestClassifier
+	15            mean symmetry       0.37454  RandomForestClassifier
+	16          concavity error       0.37489  RandomForestClassifier
+	17   mean fractal dimension       0.37485  RandomForestClassifier
+	18             radius error       0.37592  RandomForestClassifier
+	19          perimeter error       0.37539  RandomForestClassifier
+	20     concave points error       0.37482  RandomForestClassifier
+	21         mean compactness       0.37410  RandomForestClassifier
+	22            texture error       0.37410  RandomForestClassifier
+	23         smoothness error       0.37424  RandomForestClassifier
+	24        compactness error       0.37410  RandomForestClassifier
+	25           symmetry error       0.37426  RandomForestClassifier
+	26  fractal dimension error       0.37413  RandomForestClassifier
+	27        worst compactness       0.37467  RandomForestClassifier
+	28           worst symmetry       0.37426  RandomForestClassifier
+	29  worst fractal dimension       0.37434  RandomForestClassifier
+	30                mean area       0.37381  RandomForestClassifier
+	31             _full_model_       0.37410  RandomForestClassifier
 
-	0                _baseline_       0.84005  RandomForestClassifier
-	1                worst area       0.44505  RandomForestClassifier
-	2           worst perimeter       0.40254  RandomForestClassifier
-	3          worst smoothness       0.37953  RandomForestClassifier
-	4            mean concavity       0.37759  RandomForestClassifier
-	5       mean concave points       0.38145  RandomForestClassifier
-	6             worst texture       0.37810  RandomForestClassifier
-	7          mean compactness       0.37568  RandomForestClassifier
-	8              mean texture       0.37818  RandomForestClassifier
-	9              radius error       0.37554  RandomForestClassifier
-	10     worst concave points       0.37553  RandomForestClassifier
-	11              mean radius       0.37478  RandomForestClassifier
-	12           mean perimeter       0.37550  RandomForestClassifier
-	13         smoothness error       0.37595  RandomForestClassifier
-	14          worst concavity       0.37503  RandomForestClassifier
-	15                mean area       0.37523  RandomForestClassifier
-	16          mean smoothness       0.37425  RandomForestClassifier
-	17            mean symmetry       0.37425  RandomForestClassifier
-	18   mean fractal dimension       0.37425  RandomForestClassifier
-	19            texture error       0.37479  RandomForestClassifier
-	20          perimeter error       0.37425  RandomForestClassifier
-	21               area error       0.37512  RandomForestClassifier
-	22        compactness error       0.37574  RandomForestClassifier
-	23          concavity error       0.37425  RandomForestClassifier
-	24     concave points error       0.37425  RandomForestClassifier
-	25           symmetry error       0.37425  RandomForestClassifier
-	26  fractal dimension error       0.37510  RandomForestClassifier
-	27        worst compactness       0.37439  RandomForestClassifier
-	28           worst symmetry       0.37464  RandomForestClassifier
-	29  worst fractal dimension       0.37431  RandomForestClassifier
-	30             worst radius       0.37306  RandomForestClassifier
-	31             _full_model_       0.37425  RandomForestClassifier
                
   
     
